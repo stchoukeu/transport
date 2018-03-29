@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2016 LasLabs Inc.
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+
+<odoo>
+         <record id="transport_hr_employee_view_search" model="ir.ui.view">
+			        <field name="name">hr.employee.kanban</field>
+			        <field name="model">hr.employee</field>
+			        <field name='inherit_id' ref='hr.hr_kanban_view_employees' />
+			        <field name="arch" type="xml">  
+			            <xpath expr="//field[@name='last_login']" position="replace">
+		                       <field name="last_login" />
+			            </xpath>
+			        </field>
+		 </record>
+
+         <record id="transport_hr_employee_view_tree" model="ir.ui.view">
+			        <field name="name">hr.employee.tree</field>
+			        <field name="model">hr.employee</field>
+			        <field name='inherit_id' ref='hr.view_employee_tree' />
+			        <field name="arch" type="xml">  
+			            <xpath expr="//field[@name='name']" position="replace">
+		                       <field name="name" />
+			            </xpath>
+			        </field>
+		 </record>
+         <record id="transport_hr_employee_view_form" model="ir.ui.view">
+			        <field name="name">hr.employee.form</field>
+			        <field name="model">hr.employee</field>
+			        <field name='inherit_id' ref='hr.view_employee_form' />
+			        <field name="arch" type="xml">  
+			            <xpath expr="//page[3]" position="after">
+			                <page string="Activité de transport">
+				                    <group >
+				                        <group string="Paramètre">
+				                            <field name="is_driver" />
+				                            <field name="is_driver_helper" />
+				                             <field name="income_percentage" />
+				                        </group>
+				                        <group string="Comptabilité">
+				                            <field name="advance_account_id" />
+				                            <field name="loan_account_id" />
+				                            <field name="expense_negative_account_id" />
+				                        </group>
+				                    </group>
+				                     <notebook>
+						                     <page string="Voyages conduits" name="voyage_chauffeur" autofocus="autofocus">
+					                            <field name="voyage_chauffeur_ids"  widget="one2many_tags"  create="false" readonly="1"  options="{'no_quick_create': True, 'no_create': True}"  mode="tree" attrs="{'readonly': [('state', 'in', ('done','cancel'))]}">
+					                                     <tree decoration-info="state == 'draft'" decoration-muted="state == 'cancel'" string="Liste des voyages">
+													           <field name="id" />
+													           <field name="name" />
+													           <field name="feuilleroute_id" />       
+													           <field name="vehicule_id"/>
+													           <field name="route_id" />
+													           <field name="fraisroute" />
+													           <field name="mtpeages" />
+													           <field name="depart_reel" />
+													           <field name="arrivee_reel" />
+													           <field name="state" />  
+												         </tree>
+					                            </field>
+					                         </page>
+						                     <page string="Voyages menés" name="voyage_motoboy">
+					                            <field name="voyage_motoboy_ids"  widget="one2many_tags"  create="false" readonly="1"  options="{'no_quick_create': True, 'no_create': True}">
+                                                         <tree decoration-info="state == 'draft'" decoration-muted="state == 'cancel'" string="Liste des voyages">
+													           <field name="id" />
+													           <field name="name" />
+													           <field name="feuilleroute_id" />       
+													           <field name="vehicule_id"/>
+													           <field name="route_id" />     
+													           <field name="depart_reel" />
+													           <field name="arrivee_reel" />
+													           <field name="state" />  
+												         </tree>					                           
+					                            </field>
+					                         </page>
+			                         </notebook> 
+			                </page>
+			            </xpath>
+			        </field>
+		 </record>
+</odoo>

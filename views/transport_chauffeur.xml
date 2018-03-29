@@ -1,0 +1,164 @@
+<openerp>
+  <data>
+     
+	   <record id="transport_chauffeur_view_search" model="ir.ui.view">
+	        <field name="name">transport.chauffeur.search</field>
+	        <field name="model">transport.chauffeur</field>
+	        <field name="arch" type="xml">
+	            <search string="Chauffeurs">
+	                 <field name="id" />
+	                 <field name="name" />
+	                 <field name="employee_id" />
+	                 <field name="contact_id" />
+	                 <field name="permit_numero" />
+                     <field name="days_to_expire" />
+                     <field name="expiration" />
+                     <field name="delivrance_date" />
+	                 <field name="permit_lieu" />
+	                 <field name="state" />
+	                 <field name="observation" />
+					 <field name="create_date" />
+					 
+	                <newline />
+	                       	   
+	                <group expand="0" string="Group By...">
+	                    <filter string="Employée"
+	                            domain="[]"
+	                            context="{'group_by':'employee_id'}"
+	                            />
+	                    <filter string="Contacts"
+	                            domain="[]"
+	                            context="{'group_by':'contact_id'}"
+	                            />
+	                    <filter string="Statut"
+	                            domain="[]"
+	                            context="{'group_by':'state'}"
+	                            /> 
+	                </group>
+	            </search>
+	        </field>
+	    </record>
+    <!--  explicit tree view definition -->
+   
+    <record id="transport_chauffeur_tree_view" model="ir.ui.view">
+      <field name="name">transport.chauffeur.tree</field>
+      <field name="model">transport.chauffeur</field>
+      <field name="arch" type="xml">
+        <tree decoration-info="state == 'draft'" decoration-muted="state == 'cancel'" string="Liste des Chauffeurs"> 
+               <field name="id" />
+               <field name="name" />
+               <field name="employee_id" />
+               <field name="permit_numero" />
+               <field name="days_to_expire" />
+               <field name="expiration" />
+               <field name="permit_lieu" />
+               <field name="state" />
+              
+        </tree>
+      </field>
+    </record>
+
+    <!--  explicit form view definition --> 
+    
+    
+    <record id="transport_chauffeur_form_view" model="ir.ui.view">
+            <field name="name">transport.chauffeur.form</field>
+            <field name="model">transport.chauffeur</field>
+            <field name="arch" type="xml">
+                <form string="Chauffeurs">
+                      <header>  
+                               <button name="bouton_cancel" states="confirm" string="Annuler"  type="object"  groups="base.group_user"/>
+		                       <button name="bouton_confirm" states="draft" string="Confirmer" type="object"   class="oe_highlight" groups="base.group_user"/>
+		                       <button name="bouton_draft" states="cancel" string="Brouillon" type="object"   class="oe_highlight" groups="base.group_user"/>
+		                       
+		                       <field name="state" widget="statusbar" nolabel="1" statusbar_visible="draft,cancel,confirm," statusbar_colors='{"cancel":"red","confirm":"blue"}'/>
+		               </header> 
+		               <sheet>  
+		                  
+	                        <div class="oe_button_box" name="button_box">
+		                         <button type="action"
+				                        class="oe_stat_button"
+				                        icon="fa-list"
+				                        name="transport.transport_voyage_action_window"
+				                        context="{'search_default_chauffeur_id': active_id}">
+				                    <field name="count_voyage_ids"
+				                           widget="statinfo"
+				                           string="Voyages" />
+				                </button>		                				                
+	                        </div>         
+		                     <group>   
+		                        <group>     
+                                       
+						               <field name="employee_id" />
+						               <field name="piece_id" />
+						               <field name="name" />
+						               <field name="contact_id" />
+						               <field name="permit_numero" />               
+		                        </group>
+		                        <group>
+						               <field name="days_to_expire" />
+						               <field name="delivrance_date" />
+						               <field name="expiration" />
+								       <field name="id" />
+		                        </group>
+		                    </group>
+		                        
+		                     <group> 
+		                              <field name="permit_lieu" />
+		                     </group>
+		                    <group>
+		                        <notebook>
+                                     <page string="Autres Informations" name="observation" autofocus="autofocus">
+										    <group>   
+						                        <group>     					               
+										               <field name="observation" />          
+						                        </group>
+						                        <group>
+										               <field name="create_date" readonly="1"  />
+										               <field name="write_date" readonly="1" /> 
+										                <field name="write_uid" readonly="1" />     						                         
+						                        </group>
+						                    </group> 
+				                     </page>
+				                     
+		                         </notebook>       
+		                    </group>
+                     </sheet> 
+                     
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div> 
+                     
+                </form>
+            </field>
+        </record>
+
+   <!--   actions opening views on models -->
+ 
+    <record model="ir.actions.act_window" id="transport_chauffeur_action_window">
+      <field name="name">Liste des chauffeurs </field>
+      <field name="res_model">transport.chauffeur</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+      
+        <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Clic ici pour créer un nouveau chauffeur.
+              </p>
+              <p>
+                 Utilise cette fonctionalité pour créer et enregistrer les chauffeurs 
+              </p>
+        </field>
+    </record> 
+
+          
+            
+    <menuitem  id="transport_menu_transport_chauffeur_list"
+               name="Chauffeurs"
+               parent="transport_menu_transport_produit"
+               action="transport_chauffeur_action_window"
+               sequence="110" />
+               
+  </data>
+</openerp>

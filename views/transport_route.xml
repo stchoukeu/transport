@@ -1,0 +1,232 @@
+<openerp>
+  <data>
+     
+	   <record id="transport_route_view_search" model="ir.ui.view">
+	        <field name="name">transport.route.search</field>
+	        <field name="model">transport.route</field>
+	        <field name="arch" type="xml">
+	            <search string="routes">
+	                 <field name="id" />
+	                 <field name="name" />
+	                 <field name="depart_id" />
+	                 <field name="arrivee_id" />
+	                 <field name="fraisroute" />
+	                  <field name="distance" />
+	                   <field name="vitesse" />
+	                 <field name="state" />
+	                 <field name="observation" />
+					 <field name="create_date" />
+				 
+	                <newline />
+	                       
+ 		   
+	                <group expand="0" string="Group By...">
+	                    <filter string="Place de Départ"
+	                            domain="[]"
+	                            context="{'group_by':'depart_id'}"
+	                            />
+	                    <filter string="Place d'arrivée"
+	                            domain="[]"
+	                            context="{'group_by':'arrivee_id'}"
+	                            />
+	                    <filter string="Statut"
+	                            domain="[]"
+	                            context="{'group_by':'state'}"
+	                            /> 
+	                </group>
+	            </search>
+	        </field>
+	    </record>
+    <!--  explicit tree view definition -->
+   
+    <record id="transport_route_tree_view" model="ir.ui.view">
+      <field name="name">transport.route.tree</field>
+      <field name="model">transport.route</field>
+      <field name="arch" type="xml">
+        <tree decoration-info="state == 'draft'" decoration-muted="state == 'cancel'" string="Liste des routes">
+              <field name="id" />
+              <field name="name" />
+              <field name="depart_id" />
+              <field name="arrivee_id" />
+              <field name="fraisroute" />
+	          <field name="create_date" />
+	           <field name="state" />
+
+        </tree>
+      </field>
+    </record>
+
+    <!--  explicit form view definition --> 
+    
+    
+    <record id="transport_route_form_view" model="ir.ui.view">
+            <field name="name">transport.route.form</field>
+            <field name="model">transport.route</field>
+            <field name="arch" type="xml">
+                <form string="routes">
+                      <header>  
+                               <button name="bouton_cancel" states="confirm" string="Annuler"  type="object"  groups="base.group_user"/>
+		                       <button name="bouton_confirm" states="draft" string="Confirmer" type="object"   class="oe_highlight" groups="base.group_user"/>
+		                       <button name="bouton_draft" states="cancel" string="Brouillon" type="object"   class="oe_highlight" groups="base.group_user"/>
+		                       
+		                       <field name="state" widget="statusbar" nolabel="1" statusbar_visible="draft,cancel,confirm," statusbar_colors='{"cancel":"red","confirm":"blue"}'/>
+		               </header> 
+		               <sheet>             
+		                     <group>   
+		                        <group>     
+						              <field name="name" />
+						              <field name="depart_id" />
+						              <field name="arrivee_id" />                 
+		                        </group>
+		                        <group>
+					                  <field name="fraisroute" />  
+						              <field name="distance" />
+	                                   <field name="vitesse" />
+						               <field name="id" />
+		                        </group>
+		                    </group>
+		                    <group>
+		                        <notebook>
+
+                                     <page string="Péages situés sur la route" name="peages" autofocus="autofocus">  <!--   options="{'no_quick_create': True, 'no_create': True}"   -->
+                                               <field name="peage_route_ids"  widget="one2many_tags">
+					                                      <form string="Péages routier">
+						                                      <group>  
+						                                          <group>  
+					                                                    <field name="peage_id" />
+						                                           </group> 
+						                                            <group> 
+						                                                  <field name="montant" />
+						                                                  
+						                                           </group>
+														           <field name="state" invisible="1"/>
+														       </group>   
+							                             </form> 
+					                                     <tree decoration-info="state == 'draft'" decoration-muted="state == 'cancel'" string="Liste des péages routiers">
+													           <field name="peage_id" />
+												               <field name="montant" />
+												               <field name="state" />       
+												         </tree>
+					                            </field>						
+						 
+				                     </page> 	
+                                     <page string="Régles des Prix de transport des produits" name="routeroute" autofocus="autofocus">
+                                               <field name="route_product_ids"  widget="one2many_tags">
+					                                      <form string="Régles des Prix de transport">
+						                                      <group>  
+						                                          <group>  
+					                                                    <field name="product_id" /> 
+					                                                    <field name="qte" />
+						                                           </group> 
+						                                            <group> 
+						                                                  <field name="uom_id" />
+						                                                  <field name="montant" />
+						                                                  <field name="prixu_transport"/>
+						                                                   
+						                                           </group>
+														           <field name="state" invisible="1"/>
+														       </group>   
+							                             </form>  
+					                                     <tree decoration-info="state == 'draft'" decoration-muted="state == 'cancel'" string="Régles des Prix de transport">
+													           <field name="product_id" />
+													           <field name="uom_id" />
+													           <field name="prixu_transport"/>
+													           <field name="state" />  
+												         </tree>
+					                            </field>						
+						 
+				                     </page>					                     
+		                             <page string="Places situés sur la route" name="endroitroute" autofocus="autofocus">
+                                               <field name="endroit_route_ids"  widget="one2many_tags">
+					                                      <form string="Places de la route">
+						                                      <group>  
+						                                          <group>  
+					                                                    <field name="endroit_id" /> 
+					                                                    <field name="country_id" />
+						                                           </group> 
+						                                            <group> 
+						                                                  <field name="ordre" />
+						                                                  <field name="state_id" />
+						                                                   
+						                                           </group>
+														           <field name="state" invisible="1"/>
+														       </group>   
+							                             </form>
+					                                     <tree decoration-info="state == 'draft'" decoration-muted="state == 'cancel'" string="Liste des endroits situées sur la route">
+													           <field name="endroit_id" />
+													           <field name="state_id" />
+													           <field name="country_id" />       
+													           <field name="ordre"/>
+													           <field name="state" />  
+												         </tree>
+					                            </field>						
+						 
+				                     </page> 
+		                          			                     
+				                     				                     			                     
+                                     <page string="Autres Informations" name="observation" autofocus="autofocus">
+										    <group>   
+						                        <group>     					               
+										               <field name="observation" />       
+						                        </group>
+						                        <group>
+										               <field name="create_date" readonly="1"  />
+										               <field name="write_date" readonly="1" /> 
+										                <field name="write_uid" readonly="1" />     						                         
+						                        </group>
+						                    </group> 
+				                     </page>
+				                     
+		                         </notebook>      
+		                    </group>
+                     </sheet> 
+                     
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div> 
+                     
+                </form>
+            </field>
+        </record>
+
+   <!--   actions opening views on models -->
+ 
+    <record model="ir.actions.act_window" id="transport_route_action_window">
+      <field name="name">Liste des routes </field>
+      <field name="res_model">transport.route</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+      
+        <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Clic ici pour créer un nouveau route.
+              </p>
+              <p>
+                 Utilise cette fonctionalité pour créer et enregistrer les routes 
+              </p>
+        </field>
+    </record> 
+
+          
+            
+    <menuitem  id="transport_menu_transport_route_list"
+               name="routes"
+               parent="transport_menu_root_config_transport"
+               action="transport_route_action_window"
+               sequence="110" />
+               
+
+ 
+
+     <!--  
+               
+     <record model="ir.rule" id="per_user_rule">
+            <field name="name">User: see the individual Record</field>
+            <field name="model_id" ref="model_help_desk_help_desk"/>
+             <field name="domain_force">[('create_uid','=',uid)]</field>
+            <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+     </record>
+     -->
+  </data>
+</openerp>

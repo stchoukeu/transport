@@ -1,0 +1,165 @@
+<openerp>
+  <data>
+     
+	   <record id="transport_carburation_view_search" model="ir.ui.view">
+	        <field name="name">transport.carburation.search</field>
+	        <field name="model">transport.carburation</field>
+	        <field name="arch" type="xml">
+	            <search string="Carburation des véhicules">
+	                 <field name="id" />
+	                 <field name="vehicule_id" />
+	                 <field name="chauffeur_id" />
+	                 <field name="feuilleroute_id" />
+	                 <field name="product_id" />
+	                 <field name="qte_consomme" />
+	                 <field name="date_conso" />
+	                 <field name="state" />
+	                 <field name="observation" />
+					 <field name="create_date" />
+					 <field name="write_date" />					 
+	                <newline />                       
+ 		   
+	                <group expand="0" string="Group By...">
+	                    <filter string="Véhicule"
+	                            domain="[]"
+	                            context="{'group_by':'vehicule_id'}"
+	                            />
+	                    <filter string="Chauffeur"
+	                            domain="[]"
+	                            context="{'group_by':'chauffeur_id'}"
+	                            />                     
+	                    <filter string="Feuille de route"
+	                            domain="[]"
+	                            context="{'group_by':'feuilleroute_id'}"
+	                            />
+	                    <filter string="Produit"
+	                            domain="[]"
+	                            context="{'group_by':'product_id'}"
+	                            />	                          
+	                    <filter string="Statut"
+	                            domain="[]"
+	                            context="{'group_by':'state'}"
+	                            /> 
+	                </group>
+	            </search>
+	        </field>
+	    </record>
+    <!--  explicit tree view definition -->
+   
+    <record id="transport_carburation_tree_view" model="ir.ui.view">
+      <field name="name">transport.carburation.tree</field>
+      <field name="model">transport.carburation</field>
+      <field name="arch" type="xml">
+        <tree decoration-info="state == 'draft'" decoration-muted="state == 'cancel'" string="Liste des carburations">
+	                 <field name="id" />
+	                 <field name="chauffeur_id" />
+	                 <field name="vehicule_id" />
+	                 <field name="feuilleroute_id" />
+	                 <field name="product_id" />
+	                 <field name="qte_consomme" />
+	                 <field name="date_conso" />
+	                 <field name="state" />	
+        </tree>
+      </field>
+    </record>
+
+    <!--  explicit form view definition --> 
+    
+    
+    <record id="transport_carburation_form_view" model="ir.ui.view">
+            <field name="name">transport.carburation.form</field>
+            <field name="model">transport.carburation</field>
+            <field name="arch" type="xml">
+                <form string="carburations">
+                      <header>  
+                               <button name="bouton_cancel" states="confirm" string="Annuler"  type="object"  groups="base.group_user"/>
+		                       <button name="bouton_confirm" states="draft" string="Confirmer" type="object"   class="oe_highlight" groups="base.group_user"/>
+		                       <button name="bouton_draft" states="cancel" string="Brouillon" type="object"   class="oe_highlight" groups="base.group_user"/>
+		                       
+		                       <field name="state" widget="statusbar" nolabel="1" statusbar_visible="draft,cancel,confirm," statusbar_colors='{"cancel":"red","confirm":"blue"}'/>
+		               </header> 
+		               <sheet>             
+		                     <group>   
+		                        <group>     
+					                  <field name="feuilleroute_id" />	
+					                 <field name="vehicule_id" />
+					                  <field name="chauffeur_id" />       
+		                        </group>
+		                        <group>
+					                 <field name="product_id" />
+					                
+	                                       <field name="qte_consomme"/>
+	                                       <field name="uom_id"/>
+	                                 
+				                      <field name="date_conso" />
+					                  <field name="id" />
+		                        </group>
+		                    </group>
+		                    <group>
+		                        <notebook>
+                                     <page string="Autres Informations" name="observation" autofocus="autofocus">
+										    <group>   
+						                        <group>     					               
+										               <field name="observation" />        
+						                        </group>
+						                        <group>
+										               <field name="create_date" readonly="1"  />
+										               <field name="write_date" readonly="1" />
+										                <field name="write_uid" readonly="1" />      						                         
+						                        </group>
+						                    </group> 
+				                     </page>
+				                     
+		                         </notebook>      
+		                    </group>
+                     </sheet> 
+                     
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div> 
+                     
+                </form>
+            </field>
+        </record>
+
+   <!--   actions opening views on models -->
+ 
+    <record model="ir.actions.act_window" id="transport_carburation_action_window">
+      <field name="name">Liste des carburations </field>
+      <field name="res_model">transport.carburation</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+      
+        <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Clic ici pour créer un nouveau carburation.
+              </p>
+              <p>
+                 Utilise cette fonctionalité pour créer et enregistrer les carburations 
+              </p>
+        </field>
+    </record> 
+
+          
+            
+    <menuitem  id="transport_menu_transport_carburation_list"
+               name="Carburation des véhicules"
+               parent="transport_menu_transport_produit"
+               action="transport_carburation_action_window"
+               sequence="110" />
+               
+
+ 
+
+     <!--  
+               
+     <record model="ir.rule" id="per_user_rule">
+            <field name="name">User: see the individual Record</field>
+            <field name="model_id" ref="model_help_desk_help_desk"/>
+             <field name="domain_force">[('create_uid','=',uid)]</field>
+            <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+     </record>
+     -->
+  </data>
+</openerp>

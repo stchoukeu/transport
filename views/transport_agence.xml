@@ -1,0 +1,154 @@
+<openerp>
+  <data>
+     
+	   <record id="transport_agence_view_search" model="ir.ui.view">
+	        <field name="name">transport.agence.search</field>
+	        <field name="model">transport.agence</field>
+	        <field name="arch" type="xml">
+	            <search string="agences">
+	                 <field name="id" />
+	                 <field name="name" />
+	                 <field name="endroit_id" />
+	                 <field name="state_id" />
+	                 <field name="country_id" />
+	                 <field name="state" />
+	                 <field name="create_date" />
+					 <field name="write_date" />
+					 
+	                <newline />
+                    
+ 		   
+	                <group expand="0" string="Group By...">
+	                    <filter string="Localisation"
+	                            domain="[]"
+	                            context="{'group_by':'endroit_id'}"
+	                            />
+	                    <filter string="Région"
+	                            domain="[]"
+	                            context="{'group_by':'state_id'}"
+	                            />
+	                    <filter string="Pays"
+	                            domain="[]"
+	                            context="{'group_by':'country_id'}"
+	                            />	                          
+	                    <filter string="Statut"
+	                            domain="[]"
+	                            context="{'group_by':'state'}"
+	                            /> 
+	                </group>
+	            </search>
+	        </field>
+	    </record>
+    <!--  explicit tree view definition -->
+   
+    <record id="transport_agence_tree_view" model="ir.ui.view">
+      <field name="name">transport.agence.tree</field>
+      <field name="model">transport.agence</field>
+      <field name="arch" type="xml">
+        <tree decoration-info="state == 'draft'" decoration-muted="state == 'cancel'" string="Liste des agences">
+	                 <field name="id" />
+	                 <field name="name" />
+	                 <field name="endroit_id" />
+	                 <field name="state_id" />
+	                 <field name="country_id" />
+	                 <field name="state" />
+
+        </tree>
+      </field>
+    </record>
+
+    <!--  explicit form view definition --> 
+    
+    
+    <record id="transport_agence_form_view" model="ir.ui.view">
+            <field name="name">transport.agence.form</field>
+            <field name="model">transport.agence</field>
+            <field name="arch" type="xml">
+                <form string="agences">
+                      <header>  
+                               <button name="bouton_cancel" states="confirm" string="Annuler"  type="object"  groups="base.group_user"/>
+		                       <button name="bouton_confirm" states="draft" string="Confirmer" type="object"   class="oe_highlight" groups="base.group_user"/>
+		                       <button name="bouton_draft" states="cancel" string="Brouillon" type="object"   class="oe_highlight" groups="base.group_user"/>
+		                       
+		                       <field name="state" widget="statusbar" nolabel="1" statusbar_visible="draft,cancel,confirm," statusbar_colors='{"cancel":"red","confirm":"blue"}'/>
+		               </header> 
+		               <sheet>             
+		                     <group>   
+		                        <group>     
+						                 <field name="name" />
+						                 <field name="endroit_id" />            
+		                        </group>
+		                        <group>
+						                 <field name="state_id" />
+						                 <field name="country_id" /> 
+						               <field name="id" />
+		                        </group>
+		                    </group>
+		                    <group>
+		                        <notebook>
+                                     <page string="Autres Informations" name="observation" autofocus="autofocus">
+										    <group>   
+						                        <group>     					               
+										               <field name="observation" />       
+						                        </group>
+						                        <group>
+										               <field name="create_date" readonly="1"  />
+										               <field name="write_date" readonly="1" /> 
+										                <field name="write_uid" readonly="1" />   						                         
+						                        </group>
+						                    </group> 
+				                     </page>
+				                     
+		                         </notebook>      
+		                    </group>
+                     </sheet> 
+                     
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div> 
+                     
+                </form>
+            </field>
+        </record>
+
+   <!--   actions opening views on models -->
+ 
+    <record model="ir.actions.act_window" id="transport_agence_action_window">
+      <field name="name">Liste des agences </field>
+      <field name="res_model">transport.agence</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+      
+        <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Clic ici pour créer une nouvelle agence.
+              </p>
+              <p>
+                 Utilise cette fonctionalité pour créer et enregistrer les agences 
+              </p>
+        </field>
+    </record> 
+
+          
+            
+    <menuitem  id="transport_menu_transport_agence_list"
+               name="Agences de transport"
+               parent="transport_menu_root_config_transport"
+               action="transport_agence_action_window"
+               sequence="110" />
+               
+
+ 
+
+     <!--  
+               
+     <record model="ir.rule" id="per_user_rule">
+            <field name="name">User: see the individual Record</field>
+            <field name="model_id" ref="model_help_desk_help_desk"/>
+             <field name="domain_force">[('create_uid','=',uid)]</field>
+            <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+     </record>
+     -->
+  </data>
+</openerp>

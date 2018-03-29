@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2016 Toolter inc.
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+
+<odoo>
+
+ <!-- Les menus de base du module transport  -->
+    
+
+     <menuitem name="Transport"  id="transport_top_root" sequence="100" groups="fleet.group_fleet_user"/>  
+   
+     <menuitem  id="transport_menu_transport_produit"
+               parent="transport.transport_top_root"
+               name="Transport des produits"
+               sequence="1" />
+
+     <menuitem  id="transport_menu_transport_vehicule"
+               parent="transport.transport_top_root"
+               name="Véhicules"
+               sequence="2" />
+   
+     <record model="ir.ui.menu" id="fleet.menu_root">
+        <field name="name">Parc automobile</field>
+        <field name="parent_id" ref="transport.transport_top_root"/>
+        <field name="sequence">1000</field> 
+    </record> 
+
+    <menuitem  id="transport_menu_root_config_transport"
+               parent="transport.transport_top_root"
+               name="Configuration"
+               sequence="1001"/>
+    <!-- GeoEngine Backend   -->
+    <record model="ir.ui.menu" id="base_geoengine.geoengine_base_menu">
+        <field name="name">GeoEngine Backend</field>
+        <field name="parent_id" ref="transport.transport_menu_root_config_transport"/>
+        <field name="sequence">900</field> 
+    </record>
+
+     <menuitem id="fleet.fleet_vehicle_menu"
+              parent="transport.transport_menu_transport_vehicule"
+              sequence="101" /> 
+     <menuitem id="fleet.fleet_vehicle_log_contract_menu"
+              parent="transport.transport_menu_transport_vehicule"
+              sequence="102" /> 
+     <menuitem id="fleet.fleet_vehicle_odometer_menu"
+              parent="transport.transport_menu_transport_vehicule"
+              sequence="103" /> 
+     <menuitem id="fleet.fleet_vehicle_log_fuel_menu"
+              parent="transport.transport_menu_transport_vehicule"
+              sequence="104" />                                     
+      <menuitem id="fleet.fleet_vehicle_log_services_menu"
+              parent="transport.transport_menu_transport_vehicule"
+              sequence="105" /> 
+     <menuitem id="fleet.fleet_vehicle_costs_menu"
+              parent="transport.transport_menu_transport_vehicule"
+              sequence="106" />   
+                                         
+    <delete model="ir.ui.menu" id="transport.fleet_vehicles"/> 
+    <delete model="ir.ui.menu" id="fleet.fleet_vehicle_menu"/> 
+         
+  
+
+</odoo>

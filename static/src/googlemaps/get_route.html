@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+      html { height: 100% }
+      body { height: 100%; margin: 0; padding: 0 }
+      #map_canvas { height: 100% }
+    </style>
+    <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?sensor=false">
+    </script>
+<script type="text/javascript">
+    var directionsDisplay = new google.maps.DirectionsRenderer();
+    var directionsService = new google.maps.DirectionsService();
+    var map;
+    var oldDirections = [];
+    var currentDirections = null;
+
+    function initialize() {
+        var qAt = document.URL.indexOf("?"); 
+        var params = document.URL.substr(qAt+1).split(",");    
+        var start = new google.maps.LatLng(params[0], params[1]);
+        var end   = new google.maps.LatLng(params[2], params[3]);
+
+        var points = [];
+        for(i = 0; i < params.length - 1; i += 2){
+            points.push(new google.maps.LatLng(params[i], params[i+1]));
+        }
+
+        var waypoints = [];
+        if (points.length > 2) {
+            for(i=1; i < points.length - 1; i++) {
+                waypoints.push({ location: points[i], stopover: true})
+            }
+        }
+
+        var mapOptions = {
+          center: start,
+          zoom: 12,          
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        
+        map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+        var marker = new google.maps.Marker({
+                map: map,
+                position: start,
+            });
+
+        directionsDisplay.setMap(map);
+        directionsDisplay.setPanel(document.getElementById("directions_panel"));
+
+
+        var request = {
+            origin      : points[0],
+            destination : points[points.length - 1],
+            waypoints : waypoints,
+            travelMode  : google.maps.TravelMode.DRIVING
+          };
+          directionsService.route(request, function(result, status) {
+            if (status == google.maps.DirectionsStatus.OK) {
+              directionsDisplay.setDirections(result);
+            }
+          });
+
+
+
+      }
+
+</script>
+</head>
+<body onload="initialize()">
+<div id="map_canvas" style="float:left;width:70%;height:100%"></div>
+<div style="float:right;width:30%;height:100%;overflow:auto">
+<!--  <button id="undo" style="display:block;margin:auto" onclick="undo()">Undo
+  </button> -->
+  <div id="directions_panel" style="width:100%"></div>
+</div>
+</body>
+</html>
+

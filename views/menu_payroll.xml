@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2016 Toolter inc.
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+
+<odoo>
+
+ <!-- Repositionnement du menu -->
+ <record model="ir.ui.menu" id="hr_payroll.menu_hr_payroll_configuration">
+        <field name="sequence">800</field>  
+  </record>
+  <!-- Renomage,Repositionnement avec definition du parent du menu -->
+ <record model="ir.ui.menu" id="hr_expense.menu_hr_expense_root">
+        <field name="name">Expenses</field>
+        <field name="parent_id" ref="hr.menu_hr_root"/>
+        <field name="sequence">100</field>  
+  </record>
+  <!-- 
+   <record model="ir.ui.menu" id="hr_expense.menu_hr_expense_configuration">
+        <field name="name">Expenses</field>
+        <field name="parent_id" ref="hr_payroll.menu_hr_payroll_configuration"/>
+        <field name="sequence">100</field>  
+  </record>  
+   -->
+  <!-- Renomage,Repositionnement avec definition du parent du menu -->
+    <record model="ir.ui.menu" id="hr_holidays.menu_hr_holidays_root">
+        <field name="name">Leaves</field>
+        <field name="parent_id" ref="hr.menu_hr_root"/>
+        <field name="sequence">200</field> 
+  </record>
+  <!-- 
+  <record model="ir.ui.menu" id="hr.menu_hr_root">
+        <field name="name">Human Resources</field>
+        <field name="parent_id" ref="visas_avenue.menu_helpdesk"/>
+        <field name="sequence">100</field> 
+  </record> 
+  -->
+  <record model="ir.ui.menu" id="hr_payroll.menu_hr_payroll_root">
+        <field name="name">Payroll</field>
+        <field name="parent_id" ref="hr.menu_hr_root"/>
+        <field name="sequence">900</field> 
+  </record>
+
+ <!-- Fin de les menus de base du module transport  -->
+ 
+  <!--             
+    <delete model="ir.ui.menu" id="hr_holidays.menu_hr_holidays_root"/>
+    <delete model="ir.ui.menu" id="hr.menu_hr_root"/>
+    <delete model="ir.ui.menu" id="hr_payroll.menu_hr_payroll_root"/>
+    <delete model="ir.ui.menu" id="hr_expense.hr_expense_root"/>
+   	   
+    <menuitem id="menu_hr_root" parent="menu_hr_root" name="Human Resources" sequence="0"/>
+    <menuitem id="menu_hr_root" parent="menu_hr_root" name="Human Resources" sequence="0"/>
+   
+    menuitem name="Leaves"
+     -->     
+
+</odoo>

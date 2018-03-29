@@ -1,0 +1,221 @@
+<openerp>
+  <data>
+     
+	   <record id="transport_voyage_view_search" model="ir.ui.view">
+	        <field name="name">transport.voyage.search</field>
+	        <field name="model">transport.voyage</field>
+	        <field name="arch" type="xml">
+	            <search string="Voyages">
+	                 <field name="id" />
+	                 <field name="name" />
+	                 <field name="feuilleroute_id" />
+	                 <field name="chauffeur_id" />
+	                 <field name="motoboy_id" />
+	                 <field name="vehicule_id"/>
+	                 <field name="agence_id" />
+	                 <field name="route_id" />
+	                 <field name="fraisroute" />
+	                 <field name="mtpeages" />
+	                 <field name="mttransport" />
+	                 <field name="depart_prevu" />
+	                 <field name="depart_reel" />
+	                 <field name="arrivee_prevu" />
+	                 <field name="arrivee_reel" />
+	                 <field name="state" />
+	                 <field name="observation" />
+	                 <field name="create_date" />
+
+	                <newline />
+	                       
+ 		   
+	                <group expand="0" string="Group By...">
+	                    <filter string="Feuille de route"
+	                            domain="[]"
+	                            context="{'group_by':'feuilleroute_id'}"
+	                            />
+	                    <filter string="Chauffeur"
+	                            domain="[]"
+	                            context="{'group_by':'chauffeur_id'}"
+	                            />
+	                    <filter string="Aide chauffeur"
+	                            domain="[]"
+	                            context="{'group_by':'motoboy_id'}"
+	                            />
+	                    <filter string="Vehicule"
+	                            domain="[]"
+	                            context="{'group_by':'vehicule_id'}"
+	                            />
+	                    <filter string="Agence de voyage"
+	                            domain="[]"
+	                            context="{'group_by':'agence_id'}"
+	                            />
+	                    <filter string="Route"
+	                            domain="[]"
+	                            context="{'group_by':'route_id'}"
+	                            />                            	                
+	                    <filter string="Statut"
+	                            domain="[]"
+	                            context="{'group_by':'state'}"
+	                            /> 
+	                </group>
+	            </search>
+	        </field>
+	    </record>
+    <!--  explicit tree view definition -->
+   
+    <record id="transport_voyage_tree_view" model="ir.ui.view">
+      <field name="name">transport.voyage.tree</field>
+      <field name="model">transport.voyage</field>
+      <field name="arch" type="xml">
+        <tree decoration-info="state == 'draft'" decoration-muted="state == 'cancel'" string="Liste des voyages">
+           <field name="id" />
+           <field name="chauffeur_id" />
+           <field name="vehicule_id"/>
+           <field name="route_id" />
+           <field name="fraisroute" sum="Total" />
+           <field name="mtpeages" sum="Total" />
+           <field name="mttransport" sum="Total" />
+           <field name="depart_prevu" />
+           <field name="depart_reel" />
+           <field name="arrivee_prevu" />
+           <field name="arrivee_reel" />
+           <field name="state" />
+           <field name="agence_id" />
+        </tree>
+      </field>
+    </record>
+
+    <!--  explicit form view definition --> 
+    
+    
+    <record id="transport_voyage_form_view" model="ir.ui.view">
+            <field name="name">transport.voyage.form</field>
+            <field name="model">transport.voyage</field>
+            <field name="arch" type="xml">
+                <form string="Voyages">
+                      <header>  
+                               <button name="bouton_draft" states="cancel" string="Brouillon"  type="object"  groups="base.group_user"/>
+                               <button name="bouton_cancel" states="confirm" string="Annuler"  type="object"  groups="base.group_user"/>
+		                       <button name="bouton_confirm" states="draft" string="Confirmer" type="object"   class="oe_highlight" groups="base.group_user"/>
+		                       <button name="bouton_planify" states="confirm" string="Planifier" type="object"  class="oe_highlight" groups="base.group_user"/>  
+		                       <button name="bouton_delivered" states="planify" string="Délivrer" type="object"  class="oe_highlight" groups="base.group_user"/>
+		                       <button name="bouton_paid" states="delivered" string="Payé" type="object"  class="oe_highlight" groups="base.group_user"/>
+		                       
+		                       <field name="state" widget="statusbar" nolabel="1" statusbar_visible="draft,cancel,confirm,planify,delivered,paid" statusbar_colors='{"cancel":"red","confirm":"blue","delivered":"green"}'/>
+		               </header> 
+		               <sheet>             
+		                     <group>
+		                        <group>
+		                             
+		                             <field name="route_id" />    
+		                              <field name="vehicule_id"/>
+					                 <field name="chauffeur_id" />
+					                 <!-- 
+					                  <field name="employee_chauffeur_id" visible="0" />
+					                  <field name="employee_motoboy_id" visible="0" />
+					                   -->
+					                 <field name="motoboy_id" />
+					                 <field name="agence_id" />
+					                 <field name="feuilleroute_id" />
+					                             
+		                        </group>
+		                        <group>
+					                
+					                 <field name="fraisroute" />
+					                 <field name="mtpeages" />
+					                 <field name="mttransport" />
+					                 <field name="depart_prevu" />
+					                 <field name="depart_reel" />
+					                 <field name="arrivee_prevu" />
+					                 <field name="arrivee_reel" />
+					                 <field name="id" />
+		                        </group>
+		                    </group>
+		                    <group>
+		                        <notebook>
+		                          
+				                     <page string="Colis ou marchandise" name="colis" autofocus="autofocus">
+				                            <field name="colis_ids"  widget="one2many_tags"   create="false" readonly="1"   options="{'no_quick_create': True, 'no_create': True}" > 
+			                                      <tree   string="Liste des produits du colis" decoration-info="state == 'draft'" decoration-muted="state == 'cancel'">
+											            <field name="id" />
+					                                     <field name="type" />
+										                 <field name="reference" />
+										                 <field name="route_id"/>
+										                 <field name="mttransport" />
+										                 <field name="depart_prevu" />
+										                 <field name="partner_id" /> 
+										                 <field name="state" />       
+												   </tree>				                                   
+				                            </field>
+	
+				                     </page>
+				                       <page string="Autres Informations" name="observation" autofocus="autofocus">
+										    <group>   
+						                        <group>     					               
+										               <field name="observation" />         
+						                        </group>
+						                        <group>
+										               <field name="create_date" readonly="1"  />
+										               <field name="write_date" readonly="1" /> 
+										               <field name="write_uid" readonly="1" /> 
+										                   						                         
+						                        </group>
+						                    </group> 
+				                     </page>
+		                         </notebook>      
+		                    </group>
+                     </sheet> 
+                     
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div> 
+                    S 
+                </form>
+            </field>
+        </record>
+
+   <!--   actions opening views on models -->
+ 
+    <record model="ir.actions.act_window" id="transport_voyage_action_window">
+      <field name="name">Liste des Voyages </field>
+      <field name="res_model">transport.voyage</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+      
+        <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Clic ici pour créer un nouveau voyage.
+              </p>
+              <p>
+                 Utilise cette fonctionalité pour créer et enregistrer les voyages 
+              </p>
+        </field>
+    </record> 
+
+          
+            
+    <menuitem  id="transport_menu_transport_voyage_list"
+               name="Voyages"
+               parent="transport_menu_transport_produit"
+               action="transport_voyage_action_window"
+               sequence="110" />
+               
+
+ 
+
+     <!--  
+   
+        <menuitem  id="transport_menu_root_config_transport"
+               parent="transport.transport_top_root"
+               name="Configuration"/>
+               
+     <record model="ir.rule" id="per_user_rule">
+            <field name="name">User: see the individual Record</field>
+            <field name="model_id" ref="model_help_desk_help_desk"/>
+             <field name="domain_force">[('create_uid','=',uid)]</field>
+            <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+     </record>
+     -->
+  </data>
+</openerp>
